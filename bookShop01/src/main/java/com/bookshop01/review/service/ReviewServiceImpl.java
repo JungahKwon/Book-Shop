@@ -43,4 +43,8 @@ public class ReviewServiceImpl implements ReviewService {
 
 		return reviewDAO.insertReview(paramMap);
 	}
+	
+	public int update(Map<String, Object> paramMap) throws Exception{
+		return reviewDAO.updateReview(paramMap);
+	}
 }

@@ -19,4 +19,6 @@ public interface ReviewService {
 
 	public int insertReview(Map<String, Object> paramMap) throws Exception;
 
+	public int update(Map<String, Object> paramMap) throws Exception;
+
 }

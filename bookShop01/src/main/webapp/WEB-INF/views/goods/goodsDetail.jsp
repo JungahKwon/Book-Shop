@@ -258,13 +258,42 @@ function reviewListGo(review_idx) {
 				$("#openr_date").text(review_date);
 				$("#openr_idxx").val(review_idx);
 				$("#reviewDelete").attr("onclick","javascript:deletePro('"+review_idx+"')");
-				
+				$("#reviewUpdate").attr("onclick","javascript:updatePro('"+review_idx+"')");
 				 // 모달 창 열기
 				 $('#reviewModal').modal('show');
 			}
 		},
 		error : function() {
 			alert("비동기 통신 장애");
+		}
+	});
+}
+
+//리뷰 작성
+function reviewWrite() {
+
+	let formData = $('.form-data').serialize();
+
+	$.ajax({
+		type : "post",
+		async : true,
+		url : "${contextPath}/review/write.do",
+			data : formData,
+		dataType : "json",
+		success : function(data) {
+
+			if (data.code === "OK") {
+				alert(data.message);
+				location.reload();
+				
+			} else {
+				alert('작성실패');
+				location.reload();
+			}
+		},
+		error : function() {
+			alert("비동기 통신 장애");
+			location.reload();
 		}
 	});
 }
@@ -305,33 +334,45 @@ function deletePro(review_idx) {
 	}
 }
 
-//리뷰 작성
-function reviewWrite() {
+//리뷰 수정
+function updatePro(review_idx) {
+	
+	console.log(review_idx);
+	console.log(review_content);
+	
+	var review_content = document.getElementById("openr_content").value;
+	var result = window.confirm("정말로 글을 수정하시겠습니까?");
+	
+	if (result == true) {//확인 버튼 클릭
 
-	let formData = $('.form-data').serialize();
-
-	$.ajax({
-		type : "post",
-		async : true,
-		url : "${contextPath}/review/write.do",
-			data : formData,
-		dataType : "json",
-		success : function(data) {
-
-			if (data.code === "OK") {
-				alert(data.message);
-				location.reload();
-				
-			} else {
-				alert('작성실패');
-				location.reload();
+		//비동기방식으로 글삭제 요청!
+		$.ajax({
+			type : "post",
+			async : true,
+			url : "${contextPath}/review/updateReview.do",
+			data : {
+				review_idx : review_idx,
+				review_content : review_content
+			},
+			dataType : "json",
+			success : function(data) {
+				if (data.status === "success") {
+					
+					alert(data.message);
+					location.reload();
+					
+				} else {
+					alert('수정 실패');
+					location.reload();
+				}
+			},
+			error : function() {
+				alert("비동기 통신 장애");
 			}
-		},
-		error : function() {
-			alert("비동기 통신 장애");
-			location.reload();
-		}
-	});
+		});
+	} else {//취소 버튼을 눌렀을때
+		return false;
+	}	
 }
 
 
@@ -562,25 +603,42 @@ window.onload = function() {
 									aria-label="Close" id="reviewClose" onclick="closeModal()" >close</button>
 							</div>
 							<div class="modal-body">
+							
 								<div class="form-wrapper">
 									<input class="form-control mb-3" type="text"
 										name="review_member_id" id="openr_mid" value="" disabled><br>
 									<input class="form-control mb-3" type="text"
 										name="review_title" id="openr_title" value="" disabled><br>
-									<textarea class="form-control" id="openr_content"
-										name="r_content" style="height: 300px; resize: none" disabled></textarea>
 								</div>
+								<c:choose>
+									<c:when test="${buyMem_}">	
+										<textarea class="form-control" id="openr_content"
+										name="r_content" style="height: 300px; resize: none" ></textarea>							
+									</c:when>
+									<c:otherwise>
+										<textarea class="form-control" id="openr_content"
+										name="r_content" style="height: 300px; resize: none" disabled></textarea>
+									</c:otherwise>								
+								</c:choose>								
 							</div>
 							<div class="modal-footer">
 								<c:choose>
 									<c:when test="${buyMem_ || member_id=='admin'}">
-										<button type="submit" id="reviewDelete"
+										<button id="reviewDelete"
 											class="btn btn-secondary" data-bs-dismiss="modal"
-											style="display: block; visibility: visible;"
+											style="display: block; visibility: visible;display: inline-block;  margin-right: 10px;"
 											onclick="javascript:deletePro();">삭제하기</button>
 									</c:when>
 								</c:choose>	
+								<c:choose>
+									<c:when test="${buyMem_}">
+										<button id="reviewUpdate"
+												style="display: block; visibility: visible;display: inline-block;  margin-right: 10px;"
+												onclick="javascript:updatePro();">수정하기</button>
+									</c:when>
+								</c:choose>
 							</div>
+						
 						</div>
 					</div>
 				</div>

@@ -9,9 +9,12 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import net.sf.json.JSONObject;
+
 public interface ReviewController {
 	
 	public String detailReview(@RequestParam ("review_idx") String review_idx,HttpServletRequest request, HttpServletResponse response) throws Exception;
 	public Map<String, String> deleteReview(@RequestParam ("review_idx") String review_idx,HttpServletRequest request, HttpServletResponse response) throws Exception;
 	public Map<String, String> writeReview(@RequestParam Map<String, Object> paramMap) throws Exception;
+	public JSONObject updateReview(@RequestParam Map<String, Object> paramMap) throws Exception;
 }

@@ -82,7 +82,6 @@ public class ReviewControllerImpl extends BaseController implements ReviewContro
 		    }
 
 		    return resultMap;
-
 		}
 	
 		//리뷰 추가
@@ -105,5 +104,23 @@ public class ReviewControllerImpl extends BaseController implements ReviewContro
 			return jsonObject ;
 		}
 		
-
+		//리뷰 수정
+		@RequestMapping(value = "/updateReview.do", method=RequestMethod.POST, produces = "application/json;charset=utf-8")
+		@ResponseBody
+		public JSONObject updateReview(@RequestParam Map<String, Object> paramMap) throws Exception {
+			
+			JSONObject jsonObject = new JSONObject();
+			
+			int result1 = reviewService.update(paramMap);
+			
+			if(result1>0){
+				jsonObject.put("status", "success");
+				jsonObject.put("message", "수정 하였습니다.");
+			}else{
+				jsonObject.put("status", "fail");
+				jsonObject.put("message", "수정 실패 하였습니다.");
+			}
+			
+			return jsonObject ;
+		}		
 }

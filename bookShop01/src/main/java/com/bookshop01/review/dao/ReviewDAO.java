@@ -18,4 +18,6 @@ public interface ReviewDAO {
 
 	public int insertReview(Map<String, Object> paramMap) throws DataAccessException;
 
+	public int updateReview(Map<String, Object> paramMap) throws DataAccessException;
+
 }

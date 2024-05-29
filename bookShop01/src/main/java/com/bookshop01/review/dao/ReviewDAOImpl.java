@@ -46,4 +46,10 @@ public class ReviewDAOImpl implements ReviewDAO {
 
 		return sqlSession.insert("mapper.review.insertReview", paramMap);
 	}
+	
+	//리뷰수정
+	@Override
+	public int updateReview(Map<String, Object> paramMap) throws DataAccessException{
+		return sqlSession.update("mapper.review.updateReview", paramMap);
+	}
 }

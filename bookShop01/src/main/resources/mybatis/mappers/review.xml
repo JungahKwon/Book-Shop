@@ -53,6 +53,13 @@
 									  #{review_goods_id, jdbcType=INTEGER}
 									 )
 	</insert>	
+
+<!-- 리뷰 수정 -->	
+	<update id="updateReview" parameterType="java.util.Map">
+		UPDATE t_shopping_review
+	    SET review_content = #{review_content}
+	    WHERE review_idx = #{review_idx}		
+	</update>
 	
 </mapper>	
 	
